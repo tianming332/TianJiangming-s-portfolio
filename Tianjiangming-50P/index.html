@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D 杂志翻页 - 50P</title>
+  <link rel="stylesheet" href="page-flip.min.css" />
+  <style>
+  body {
+    margin: 0;
+    background: #222;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+  }
+  #book-container {
+    transform-origin: center center; /* 关键：改为居中缩放 */
+  }
+  #page-num {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    font-family: sans-serif;
+    z-index: 10;
+  }
+  </style>
+</head>
+<body>
+  <div id="book-container" class="demo-book"></div>
+  <div id="page-num">第 1 / 50 页</div>
+
+  <script src="page-flip.browser.min.js"></script>
+  <script>
+  const TOTAL_PAGES = 50;
+  const imagePaths = Array.from({ length: TOTAL_PAGES }, (_, i) =>
+    `images/page (${i + 1}).jpg`
+  );
+
+  const pageFlip = new St.PageFlip(document.getElementById("book-container"), {
+    width: 1680,
+    height: 1189,
+    size: "stretch",
+    maxShadowOpacity: 0.6,
+    showCover: false,
+    mobileScrollSupport: false,
+    useMouseEvents: true,
+    pageMode: "double"
+  });
+
+  // 直接传递图片路径数组
+  pageFlip.loadFromImages(imagePaths);
+
+  const pageNumEl = document.getElementById("page-num");
+  function updatePageNumber() {
+    const current = pageFlip.getCurrentPageIndex() + 1;
+    const total = pageFlip.getPageCount();
+    pageNumEl.textContent = `第 ${current} / ${total} 页`;
+  }
+  pageFlip.on("flip", updatePageNumber);
+
+  function resize() {
+    const scale = Math.min(
+      window.innerWidth / 1680,
+      window.innerHeight / 1189
+    );
+    document.getElementById("book-container").style.transform = `scale(${scale})`;
+  }
+  window.addEventListener("resize", resize);
+  resize();
+</script>
+</body>
+</html>
