@@ -115,3 +115,12 @@
   </script>
 </body>
 </html>
+<script>
+  // 禁止右键菜单
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  // 禁止图片拖拽
+  document.addEventListener('dragstart', e => {
+    if (e.target.tagName.toLowerCase() === 'img') e.preventDefault();
+  });
+</script>
